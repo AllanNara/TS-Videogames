@@ -1,9 +1,22 @@
-const server = require('./src/app.js');
-// const { conn } = require('./src/db.js');
+import dotenv from "dotenv";
+dotenv.config();
+import "reflect-metadata";
+import server from './src/app';
+import AppDataSource from "./src/db"
 
-// Syncing all the models at once.
-// conn.sync({ force: true }).then(() => {
-  server.listen(3001, () => {
-    console.log('%s listening at 3001'); // eslint-disable-line no-console
-  });
-// });
+(async function () {
+  try {
+    await AppDataSource.initialize();
+    console.log("Database conected")
+    server.listen(3001, () => {
+      console.log('listening on port 3001');
+    });    
+  } catch (error) {
+    if(error instanceof Error){
+      console.log("holaaaaaa", error.stack)
+      console.log({ErrorMsg: error.message});
+    } else {
+      console.log(error)
+    }
+  }
+})();

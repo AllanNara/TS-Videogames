@@ -1,12 +1,28 @@
-// const { DataTypes } = require('sequelize');
-// // Exportamos una funcion que define el modelo
-// // Luego le injectamos la conexion a sequelize.
-// module.exports = (sequelize) => {
-//   // defino el modelo
-//   sequelize.define('videogame', {
-//     name: {
-//       type: DataTypes.STRING,
-//       allowNull: false,
-//     },
-//   });
-// };
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+
+@Entity("videogames")
+export class Videogame {
+  
+  @PrimaryGeneratedColumn("uuid")
+  id: number
+
+  @Column({unique: true})
+  name: string
+
+  @Column()
+  description: string
+
+  @Column("date")
+  released: string
+
+  @Column("float")
+  rating: number
+
+  @Column()
+  isDataBase: boolean
+
+  @Column("text")
+  image: string
+
+  
+}
