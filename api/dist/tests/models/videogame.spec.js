@@ -1,6 +1,6 @@
+"use strict";
 // const { Videogame, conn } = require('../../src/db.js');
 // const { expect } = require('chai');
-
 // describe('Videogame model', () => {
 //   before(() => conn.authenticate()
 //     .catch((err) => {

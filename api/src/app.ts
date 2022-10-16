@@ -1,24 +1,27 @@
 import express, { Express } from 'express';
 import morgan from 'morgan';
 import routes from './routes/index';
-require('./db.js');
+import cors from 'cors';
+import "./db";
 
+import handleError from './middlewares/handleErrors';
+
+
+//Initialize
 const server: Express = express();
 
-server.name = 'API';
-
+//Settings
 server.use(express.urlencoded({ extended: true, limit: '50mb' }));
 server.use(express.json({ limit: '50mb' }));
+server.use(cors());
+
+//Middlewares
 server.use(morgan('dev'));
 
+//All routes
 server.use('/api', routes);
 
 // Error catching endware.
-// server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-//   const status = err.status || 500;
-//   const message = err.message || err;
-//   console.error(err);
-//   res.status(status).send(message);
-// });
+server.use(handleError);
 
 export default server;
