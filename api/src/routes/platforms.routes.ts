@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import {  } from "../controllers/platforms.controllers";
+import { IRouter, Router } from 'express';
+import { allPlatforms } from "../controllers/platforms.controllers";
 
+const router: IRouter  = Router();
 
-const router = Router();
-
+router.get('/', allPlatforms);
 
 export default router;

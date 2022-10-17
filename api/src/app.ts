@@ -5,6 +5,7 @@ import cors from 'cors';
 import "./db";
 
 import handleError from './middlewares/handleErrors';
+import pageNotFound from './middlewares/404';
 
 
 //Initialize
@@ -23,5 +24,8 @@ server.use('/api', routes);
 
 // Error catching endware.
 server.use(handleError);
+
+// 404 Page not found
+server.use("*", pageNotFound);
 
 export default server;

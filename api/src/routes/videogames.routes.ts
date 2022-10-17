@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import {  } from "../controllers/videogames.controllers";
+import { IRouter, Router } from 'express';
+import { allVideogames } from "../controllers/videogames.controllers";
 
+const router: IRouter  = Router();
 
-const router = Router();
-
+router.get('/', allVideogames);
 
 export default router;

@@ -1,5 +1,5 @@
 import { DataSource } from "typeorm";
-import * as models from "./models/index";
+import * as models from "./models";
 const allModels = Object.values(models);
 
 const AppDataSource = new DataSource({

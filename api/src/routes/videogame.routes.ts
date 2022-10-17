@@ -1,8 +1,9 @@
-import { Router } from 'express';
-import {  } from "../controllers/videogame.controllers";
+import { IRouter, Router } from 'express';
+import { getVideogameById, newVideogame } from "../controllers/videogame.controllers";
 
+const router: IRouter  = Router();
 
-const router = Router();
-
+router.get('/:idVideogame', getVideogameById);
+router.post('/', newVideogame);
 
 export default router;
