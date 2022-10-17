@@ -22,10 +22,10 @@ server.use(morgan("dev"));
 //All routes
 server.use('/api', routes);
 
-// Error catching endware.
-server.use(handleError);
-
 // 404 Page not found
 server.use("*", pageNotFound);
+
+// Error catching endware.
+server.use(handleError);
 
 export default server;

@@ -1,9 +1,9 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity("genres")
 export class Genre extends BaseEntity {
   
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   id: number
 
   @Column({unique: true})

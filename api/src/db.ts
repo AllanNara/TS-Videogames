@@ -10,7 +10,7 @@ const AppDataSource = new DataSource({
   password: "unodoscuatro",
   database: "videogames_ts",
   entities: [...allModels],
-  logging: true,
+  logging: false,
   synchronize: true,
 });
 
