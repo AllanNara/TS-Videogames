@@ -1,4 +1,4 @@
-import { gamesApi, VideogamesResults } from "../../types";
+import { GamesApi, VideogamesResults } from "../../types";
 import axios from "axios";
 import { Game } from "../utils/classGame";
 
@@ -13,7 +13,7 @@ export async function getGamesApi(name: string | undefined): Promise<Array<Video
     : `https://api.rawg.io/api/games?page_size=40&key=${API_KEY}`;
   
   // VARIABLE FOR RESULTS FROM API
-  let promisesResultApi: Array<gamesApi> = [];
+  let promisesResultApi: Array<GamesApi> = [];
   if(!Boolean(name)) {
     const nexts = axios.get(`${callApi}&page=1`);
     const nexts1 = axios.get(`${callApi}&page=2`);
@@ -36,9 +36,7 @@ export async function getGamesApi(name: string | undefined): Promise<Array<Video
   };
   // MAP ALL GAMES FROM API IN VARIABLE RESULT
   promisesResultApi.forEach((data): void => {
-    let platforms: Array<string> = data.platforms.map(
-      (pl) => pl.platform.name
-    );
+    let platforms: Array<string> = data.platforms.map((pl) => pl.platform.name);
     let genres: Array<string> = data.genres.map((gr) => gr.name);
     let game = new Game(
       data.id,

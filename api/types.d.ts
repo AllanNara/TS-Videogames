@@ -25,7 +25,7 @@ export type ResponseAxios = {
   data: DataAxios;
 };
 
-export type gamesApi = {
+export type GamesApi = {
   id: number;
   name: string;
   background_image: string;
@@ -33,6 +33,11 @@ export type gamesApi = {
   platforms: Array<{ platform: { id: number; name: string } }>;
   genres: Array<{ id: number; name: string }>;
 };
+
+export type GameDetailApi = GamesApi & {
+  description_raw: string;
+  released: string;
+}
 
 export interface VideogamesResults {
   id: number;
@@ -43,3 +48,9 @@ export interface VideogamesResults {
   genres: Array<string>;
   platforms: Array<string>;
 };
+
+export interface AllDetailGame extends VideogamesResults {
+  description: string;
+  released: string;
+}
+

@@ -1,4 +1,4 @@
-import { VideogamesResults } from "../../types";
+import { AllDetailGame, VideogamesResults } from "../../types";
 
 export class Game implements VideogamesResults {
   public id: number;
@@ -28,4 +28,23 @@ export class Game implements VideogamesResults {
   }
 }
 
-// export default Game;
+export class GameDetail extends Game implements AllDetailGame {
+  public description: string;
+  public released: string;
+
+  constructor(
+    id: number,
+    name: string,
+    image: string,
+    genres: Array<string>,
+    platforms: Array<string>,
+    description: string,
+    released: string,
+    rating = 0,
+    isDataBase = false
+  ) {
+    super(id, name, image, genres, platforms, rating, isDataBase);
+    this.description = description;
+    this.released = released;
+  }
+}
