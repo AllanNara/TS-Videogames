@@ -17,7 +17,6 @@ import { addPlatforms } from "./src/helpers/add_platforms_db";
     });    
   } catch (error) {
     if(error instanceof Error){
-      console.log("holaaaaaa", error.stack)
       console.log({ErrorMsg: error.message});
     } else {
       console.log(error)
