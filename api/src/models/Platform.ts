@@ -16,17 +16,6 @@ export class Platform extends BaseEntity {
   @Column({ unique: true })
   name: string;
 
-  @ManyToMany((type) => Videogame)
-  @JoinTable({
-    name: "game_platforms",
-    joinColumn: {
-      name: "platformId",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "videogameId",
-      referencedColumnName: "id",
-    },
-  })
-  videogame: Array<Videogame>;
+  @ManyToMany((type) => Videogame, (videogame) => videogame.platforms)
+  videogames: Array<Videogame>;
 }

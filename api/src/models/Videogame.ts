@@ -13,7 +13,7 @@ import { Platform } from "./Platform";
 @Entity("videogames")
 export class Videogame extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Column({ unique: true })
   name: string;
@@ -32,34 +32,30 @@ export class Videogame extends BaseEntity {
   @Column("boolean", { default: true })
   isDataBase: boolean;
 
-  @Column("text")
+  @Column("text", { nullable: true })
   image: string;
 
-  @ManyToMany((type) => Genre)
+  @ManyToMany((type) => Genre, (genre) => genre.videogames)
   @JoinTable({
     name: "game_genres",
     joinColumn: {
       name: "videogameId",
-      referencedColumnName: "id",
     },
     inverseJoinColumn: {
       name: "genreId",
-      referencedColumnName: "id",
     },
   })
-  genre: Array<Genre>;
+  genres: Array<Genre>;
 
-  @ManyToMany((type) => Platform)
+  @ManyToMany((type) => Platform, (platform) => platform.videogames)
   @JoinTable({
     name: "game_platforms",
     joinColumn: {
       name: "videogameId",
-      referencedColumnName: "id",
     },
     inverseJoinColumn: {
       name: "platformId",
-      referencedColumnName: "id",
     },
   })
-  platform: Array<Platform>;
+  platforms: Array<Platform>;
 }

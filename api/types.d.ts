@@ -1,3 +1,5 @@
+import { Genre, Platform } from "./src/models";
+
 export interface InterfaceCustomError {
   message: string;
   status: number;
@@ -40,17 +42,17 @@ export type GameDetailApi = GamesApi & {
 }
 
 export interface VideogamesResults {
-  id: number;
+  id: number | string;
   rating: number;
   name: string;
   isDataBase?: boolean;
   image: string;
-  genres: Array<string>;
-  platforms: Array<string>;
+  genres: Array<string> | Array<Genre>;
+  platforms: Array<string> | Array<Platform>;
 };
 
 export interface AllDetailGame extends VideogamesResults {
   description: string;
-  released: string;
+  released: string | Date;
 }
 

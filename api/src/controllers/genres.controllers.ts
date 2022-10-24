@@ -7,8 +7,7 @@ export const allGenres = async(req: Req, res: Res, next: Next): Promise<any> => 
     const response = await Genre.find();
     if(!response.length) {
       throw new CustomError("Base de datos no cargada", 500, "No se encontraron generos en la base de datos, posible error de carga previa")
-      // return res.status(200).json({ message: "No content available." });
-    }
+    };
     res.status(200).json(response);
   } catch (error) {
     next(error)
