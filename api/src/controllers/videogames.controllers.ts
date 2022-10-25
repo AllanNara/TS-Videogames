@@ -30,7 +30,6 @@ export const allVideogames = async (req: Req, res: Res, next: Next): Promise<any
       }
     });
 
-    console.log(gamesDb)
     const gamesApi = await getGamesApi(name as string);
 
     result = [...gamesDb, ...gamesApi];
