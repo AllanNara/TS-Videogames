@@ -4,7 +4,6 @@ import {
   Entity,
   PrimaryColumn,
   ManyToMany,
-  JoinTable,
 } from "typeorm";
 import { Videogame } from "./Videogame";
 

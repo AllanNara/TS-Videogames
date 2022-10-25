@@ -14,20 +14,14 @@ import { Platform } from "./Platform";
 export class Videogame extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
-
-  @Column({ unique: true })
-  name: string;
-
-  @Column({ length: 40, unique: true })
-  description: string;
-
-  @Column("date", { default: new Date().toISOString().split("T")[0], nullable: true })
-  released: Date;
-
+  
   @Column("float", { default: 0, nullable: true })
   @Max(5)
   @Min(0)
   rating: number;
+
+  @Column({ unique: true })
+  name: string;
 
   @Column("boolean", { default: true })
   isDataBase: boolean;
@@ -58,4 +52,11 @@ export class Videogame extends BaseEntity {
     },
   })
   platforms: Array<Platform>;
+
+  @Column({ length: 40, unique: true })
+  description: string;
+
+  @Column("date", { default: new Date().toISOString().split("T")[0], nullable: true })
+  released: Date;
+
 }

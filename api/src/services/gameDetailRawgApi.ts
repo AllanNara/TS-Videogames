@@ -1,4 +1,4 @@
-import { AllDetailGame, GameDetailApi } from "../../types";
+import { AllDetailGame, GameDetailApi, NormalEntity } from "../../types";
 import axios from "axios";
 import { GameDetail } from "../utils/classGame";
 import { CustomError } from "../utils/customError";
@@ -11,8 +11,15 @@ export async function gameDetailApi(id: string): Promise<AllDetailGame> {
     const find = await axios.get(`https://api.rawg.io/api/games/${id}?key=${API_KEY}`);
     
     const found: GameDetailApi = find.data;
-    let genresGame: Array<string> = found.genres.map(gnr => gnr.name);
-    let platformsGame: Array<string> = found.platforms.map(plt => plt.platform.name);
+    
+    let genresGame: Array<NormalEntity> = 
+    found.genres.map(gnr => {
+      return { name: gnr.name, id: gnr.id }
+    });
+    let platformsGame: Array<NormalEntity> = 
+    found.platforms.map(plt => {
+      return { name: plt.platform.name, id: plt.platform.id }
+    });
     
     game = new GameDetail(
       found.id,

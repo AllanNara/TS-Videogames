@@ -1,4 +1,4 @@
-import { GamesApi, VideogamesResults } from "../../types";
+import { GamesApi, NormalEntity, VideogamesResults } from "../../types";
 import axios from "axios";
 import { Game } from "../utils/classGame";
 
@@ -36,8 +36,14 @@ export async function getGamesApi(name: string | undefined): Promise<Array<Video
   };
   // MAP ALL GAMES FROM API IN VARIABLE RESULT
   promisesResultApi.forEach((data): void => {
-    let platforms: Array<string> = data.platforms.map((pl) => pl.platform.name);
-    let genres: Array<string> = data.genres.map((gr) => gr.name);
+    let platforms: Array<NormalEntity> = 
+    data.platforms.map((pl) => {
+      return {name: pl.platform.name, id: pl.platform.id}
+    });
+    let genres: Array<NormalEntity> = 
+    data.genres.map((gr) => {
+      return {name: gr.name, id: gr.id}
+    });
     let game = new Game(
       data.id,
       data.name,

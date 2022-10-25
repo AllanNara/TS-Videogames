@@ -4,7 +4,7 @@ export interface InterfaceCustomError {
   message: string;
   status: number;
   additionalInfo: any;
-};
+}
 
 export type NormalEntity = {
   id: number;
@@ -39,7 +39,7 @@ export type GamesApi = {
 export type GameDetailApi = GamesApi & {
   description_raw: string;
   released: string;
-}
+};
 
 export interface VideogamesResults {
   id: number | string;
@@ -47,12 +47,11 @@ export interface VideogamesResults {
   name: string;
   isDataBase?: boolean;
   image: string;
-  genres: Array<string> | Array<Genre>;
-  platforms: Array<string> | Array<Platform>;
-};
+  genres: Array<NormalEntity> | Array<Genre>;
+  platforms: Array<NormalEntity> | Array<Platform>;
+}
 
 export interface AllDetailGame extends VideogamesResults {
   description: string;
   released: string | Date;
 }
-

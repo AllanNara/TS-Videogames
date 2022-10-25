@@ -1,4 +1,4 @@
-import { AllDetailGame, VideogamesResults } from "../../types";
+import { AllDetailGame, NormalEntity, VideogamesResults } from "../../types";
 
 export class Game implements VideogamesResults {
   public id: number;
@@ -6,15 +6,15 @@ export class Game implements VideogamesResults {
   public name: string;
   public isDataBase: boolean;
   public image: string;
-  public genres: Array<string>;
-  public platforms: Array<string>;
+  public genres: Array<NormalEntity>;
+  public platforms: Array<NormalEntity>;
 
   constructor(
     id: number,
     name: string,
     image: string,
-    genres: Array<string>,
-    platforms: Array<string>,
+    genres: Array<NormalEntity>,
+    platforms: Array<NormalEntity>,
     rating = 0,
     isDataBase = false
   ) {
@@ -36,8 +36,8 @@ export class GameDetail extends Game implements AllDetailGame {
     id: number,
     name: string,
     image: string,
-    genres: Array<string>,
-    platforms: Array<string>,
+    genres: Array<NormalEntity>,
+    platforms: Array<NormalEntity>,
     description: string,
     released: string,
     rating = 0,
