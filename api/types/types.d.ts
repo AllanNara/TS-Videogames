@@ -1,4 +1,4 @@
-import { Genre, Platform } from "./src/models";
+import { Genre, Platform } from "../src/models";
 
 export interface InterfaceCustomError {
   message: string;
@@ -54,4 +54,17 @@ export interface VideogamesResults {
 export interface AllDetailGame extends VideogamesResults {
   description: string;
   released: string | Date;
+}
+
+type DataBase = {
+  user: string,
+  password: string,
+  database: string,
+  host: string,
+  dialect: string
+}
+
+interface Enviroment {
+  PORT: number,
+  DB: DataBase
 }

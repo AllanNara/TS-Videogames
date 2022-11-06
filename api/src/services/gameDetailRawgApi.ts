@@ -1,4 +1,4 @@
-import { AllDetailGame, GameDetailApi, NormalEntity } from "../../types";
+import { AllDetailGame, GameDetailApi, NormalEntity } from "../../types/types";
 import axios from "axios";
 import { GameDetail } from "../utils/classGame";
 import { CustomError } from "../utils/customError";

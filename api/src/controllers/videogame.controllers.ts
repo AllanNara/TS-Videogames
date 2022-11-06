@@ -1,5 +1,5 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import { AllDetailGame } from "../../types";
+import { AllDetailGame } from "../../types/types";
 import { Videogame, Genre, Platform } from "../models";
 import { gameDetailApi } from "../services/gameDetailRawgApi";
 import { CustomError } from "../utils/customError";

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Platform } from "../models";
-import { AxiosResults } from "../../types";
+import { AxiosResults } from "../../types/types";
 const { API_KEY } = process.env;
 
 export async function addPlatforms(): Promise<void> {

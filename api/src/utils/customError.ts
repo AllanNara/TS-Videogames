@@ -1,4 +1,4 @@
-import { InterfaceCustomError } from "../../types";
+import { InterfaceCustomError } from "../../types/types";
 
 // Class for handle error catching
 export class CustomError implements InterfaceCustomError {

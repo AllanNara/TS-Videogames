@@ -2,7 +2,7 @@ import { Request as Req, Response as Res, NextFunction as Next } from "express";
 import { Videogame } from "../models";
 import { getGamesApi } from "../services/gamesRawgApi";
 import { CustomError } from "../utils/customError";
-import { VideogamesResults } from "../../types";
+import { VideogamesResults } from "../../types/types";
 import { Like } from "typeorm";
 
 

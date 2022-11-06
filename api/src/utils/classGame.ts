@@ -1,4 +1,4 @@
-import { AllDetailGame, NormalEntity, VideogamesResults } from "../../types";
+import { AllDetailGame, NormalEntity, VideogamesResults } from "../../types/types";
 
 export class Game implements VideogamesResults {
   public id: number;

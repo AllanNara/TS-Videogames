@@ -1,6 +1,6 @@
 import axios from "axios";
 import { Genre } from "../models";
-import { AxiosResults } from "../../types";
+import { AxiosResults } from "../../types/types";
 const { API_KEY } = process.env;
 
 export async function addGenres(): Promise<void> {
