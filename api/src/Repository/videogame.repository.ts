@@ -2,15 +2,29 @@ import { DeleteResult, Repository } from "typeorm";
 import Videogame from "./entity/Videogame";
 import Platform from "./entity/Platform";
 import Genre from "./entity/Genre";
+import { Like } from "typeorm";
 
 export default class VideogameRepository extends Repository<Videogame> {
-	async findAll(): Promise<Videogame[]> {
-		const videogames = await this.find();
+	async findAll(name?: string): Promise<Videogame[]> {
+		const options: { relations: Object; where?: Object } = {
+			relations: {
+				genres: true,
+				platforms: true,
+			},
+		};
+		if (name) options.where = { name: Like(`%${name}%`) };
+		const videogames = await this.find(options);
 		return videogames;
 	}
 
-	async findById(id: string): Promise<Videogame> {
-		const videogame = await this.findOneBy({ id });
+	async findGameById(id: string): Promise<Videogame | null> {
+		const videogame = await this.findOne({
+			where: { id },
+			relations: {
+				platforms: true,
+				genres: true,
+			},
+		});
 		return videogame;
 	}
 

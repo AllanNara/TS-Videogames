@@ -2,12 +2,14 @@ import { Repository } from "typeorm";
 import Platform from "./entity/Platform";
 
 export default class PlatformRepository extends Repository<Platform> {
-	async findAll(): Promise<Platform[]> {
-		const platforms = await this.find();
+	async findAll(names?: string[]): Promise<Platform[]> {
+		const options: { where?: Object } = {};
+		if (names) options.where = { names };
+		const platforms = await this.find(options);
 		return platforms;
 	}
 
-	async findByName(name: string) {
+	async findPlatform(name: string): Promise<Platform | null> {
 		const platform = await this.findOne({ where: { name } });
 		return platform;
 	}

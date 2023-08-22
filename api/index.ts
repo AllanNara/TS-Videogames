@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import "reflect-metadata";
 import server from "./src/app";
-import AppDataSource from "./src/DataSource";
+import AppDataSource from "./src/AppDataSource";
 import { addGenres } from "./src/helpers/add_genres_db";
 import { addPlatforms } from "./src/helpers/add_platforms_db";
 

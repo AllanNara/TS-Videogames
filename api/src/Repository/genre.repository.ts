@@ -2,12 +2,14 @@ import { Repository } from "typeorm";
 import Genre from "./entity/Genre";
 
 export default class GenreRepository extends Repository<Genre> {
-	async findAll(): Promise<Genre[]> {
-		const genres = await this.find();
+	async findAll(names?: string[]): Promise<Genre[]> {
+		const options: { where?: Object } = {};
+		if (names) options.where = { names };
+		const genres = await this.find(options);
 		return genres;
 	}
 
-	async findByName(name: string) {
+	async findGenre(name: string): Promise<Genre | null> {
 		const genre = await this.findOne({ where: { name } });
 		return genre;
 	}

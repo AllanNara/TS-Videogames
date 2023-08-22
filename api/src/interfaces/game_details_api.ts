@@ -1,4 +1,4 @@
-export default interface GameDetailApi {
+export default interface GameDetailsApi {
 	id: number;
 	slug: string;
 	name: string;

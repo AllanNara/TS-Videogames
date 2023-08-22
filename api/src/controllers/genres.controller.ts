@@ -1,6 +1,6 @@
 import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import { Genre } from "../Repository/entity";
-import { CustomError } from "../utils/customError";
+import Genre from "../Repository/entity/Genre";
+import CustomError from "../utils/customError";
 
 export const allGenres = async (req: Req, res: Res, next: Next): Promise<any> => {
 	try {

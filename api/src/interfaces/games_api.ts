@@ -34,7 +34,7 @@ interface YearYear {
 	nofollow: boolean;
 }
 
-interface Result {
+export interface Result {
 	id: number;
 	slug: string;
 	name: string;

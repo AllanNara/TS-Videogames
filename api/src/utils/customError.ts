@@ -1,16 +1,10 @@
-import { InterfaceCustomError } from "../../types/types";
+import { ICustomError } from "../interfaces/customError";
 
-// Class for handle error catching
-export class CustomError implements InterfaceCustomError {
-  message!: string;
-  status!: number;
-  additionalInfo!: any;
-
-  constructor(message: string, status: number = 500, additionalInfo: any = {}) {
-    this.message = message;
-    this.status = status;
-    this.additionalInfo = additionalInfo;
-  }
+export default class CustomError implements ICustomError {
+	constructor(
+		public error: string = "INTERNAL_SERVER_ERROR",
+		public status_error: number = 500,
+		public message: any = "Failed operation",
+		public success: boolean = false
+	) {}
 }
-
-// export default CustomError;

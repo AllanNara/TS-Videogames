@@ -12,7 +12,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"strict": true,
 		"noImplicitAny": true,
-		"strictNullChecks": false,
+		"strictNullChecks": true,
 		"strictPropertyInitialization": false,
 		"useUnknownInCatchVariables": false,
 		"alwaysStrict": true,

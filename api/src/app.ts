@@ -2,7 +2,7 @@ import express, { Express } from "express";
 import morgan from "morgan";
 import routes from "./routes/index.routes";
 import cors from "cors";
-import "./DataSource";
+import "./AppDataSource";
 
 import handleError from "./middlewares/handleErrors";
 import pageNotFound from "./middlewares/404";
