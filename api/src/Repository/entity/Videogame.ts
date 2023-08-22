@@ -7,11 +7,11 @@ import {
 	JoinTable,
 } from "typeorm";
 import { Min, Max } from "class-validator";
-import { Genre } from "./Genre";
-import { Platform } from "./Platform";
+import Genre from "./Genre";
+import Platform from "./Platform";
 
 @Entity("videogames")
-export class Videogame extends BaseEntity {
+export default class Videogame extends BaseEntity {
 	@PrimaryGeneratedColumn("uuid")
 	id: string;
 
