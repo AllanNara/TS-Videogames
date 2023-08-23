@@ -4,12 +4,11 @@ import PlatformRepository from "../Repository/platform.repository";
 import CustomError from "../utils/customError";
 
 class PlatformService {
-	constructor(
-		private repository: PlatformRepository = new PlatformRepository(
-			Platform,
-			AppDataSource.manager
-		)
-	) {}
+	private repository: PlatformRepository;
+
+	constructor() {
+		this.repository = new PlatformRepository(Platform, AppDataSource.manager);
+	}
 
 	async find(names?: string[]) {
 		try {

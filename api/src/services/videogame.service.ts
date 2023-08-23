@@ -9,12 +9,11 @@ import { getGameDetailsApi } from "./utils/GameDetailsApi";
 import { getGamesApi } from "./utils/GamesApi";
 
 class VideogameService {
-	constructor(
-		private repository: VideogameRepository = new VideogameRepository(
-			Videogame,
-			AppDataSource.manager
-		)
-	) {}
+	private repository: VideogameRepository;
+
+	constructor() {
+		this.repository = new VideogameRepository(Videogame, AppDataSource.manager);
+	}
 
 	async find(name?: string) {
 		try {

@@ -4,12 +4,11 @@ import GenreRepository from "../Repository/genre.repository";
 import CustomError from "../utils/customError";
 
 class GenreService {
-	constructor(
-		private repository: GenreRepository = new GenreRepository(
-			Genre,
-			AppDataSource.manager
-		)
-	) {}
+	private repository: GenreRepository;
+
+	constructor() {
+		this.repository = new GenreRepository(Genre, AppDataSource.manager);
+	}
 
 	async find(names?: string[]) {
 		try {
