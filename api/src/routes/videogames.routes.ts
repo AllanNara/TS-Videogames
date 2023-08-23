@@ -1,11 +1,11 @@
 import { IRouter, Router } from "express";
-import { allVideogames } from "../controllers/videogames.controllers";
-import { getVideogameById, newVideogame } from "../controllers/videogame.controllers";
+import videogamesControllers from "../controllers/videogames.controllers";
 
 const router: IRouter = Router();
 
-router.get("/", allVideogames);
-router.get("/:idVideogame", getVideogameById);
-router.post("/", newVideogame);
+router.get("/", videogamesControllers.getAll);
+router.post("/", videogamesControllers.create);
+router.get("/:idVideogame", videogamesControllers.getById);
+router.delete("/:idVideogame", videogamesControllers.delete);
 
 export default router;

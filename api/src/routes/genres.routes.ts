@@ -1,8 +1,8 @@
 import { IRouter, Router } from "express";
-import { allGenres } from "../controllers/genres.controller";
+import genresController from "../controllers/genres.controller";
 
 const router: IRouter = Router();
 
-router.get("/", allGenres);
+router.get("/", genresController.getAll);
 
 export default router;
