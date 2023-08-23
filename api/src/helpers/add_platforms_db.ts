@@ -1,32 +1,21 @@
 import axios from "axios";
-import { Platform } from "../Repository/entity";
-import { AxiosResults } from "../../types/types";
-const { API_KEY } = process.env;
+import config from "../../config/environments";
+import platformService from "../services/platform.service";
+import PlatformsApi from "../interfaces/platforms_api";
 
 export async function addPlatforms(): Promise<void> {
-	try {
-		const findPlatforms = await Platform.find();
-		if (!Boolean(findPlatforms.length)) {
-			const platformsApi = await axios.get(
-				`https://api.rawg.io/api/platforms?key=${API_KEY}`
-			);
-			const platforms: Array<AxiosResults> = platformsApi.data.results;
-			const promises: Array<Promise<Platform>> = platforms.map((platform) => {
-				let addPlatform = new Platform();
-				addPlatform.id = platform.id;
-				addPlatform.name = platform.name;
-				return addPlatform.save();
-			});
-			await Promise.all(promises);
-			console.log("Platforms added");
-		} else {
-			console.log("Platforms alredy charged");
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.log({ ErrorMsg: error.message });
-		} else {
-			console.log(error);
-		}
-	}
+	const findPlatforms = await platformService.find().catch(console.log);
+	if (!findPlatforms?.length) return console.log("Platforms alredy charged");
+
+	const { data } = await axios.get<PlatformsApi>(
+		`https://api.rawg.io/api/platforms?key=${config.API_KEY}`
+	);
+
+	const platforms = data.results.map(({ id, name }) => {
+		return { id, name };
+	});
+	platforms.push({ name: "Web", id: 171 });
+	platformService.create(platforms);
+
+	console.log("Platforms added");
 }

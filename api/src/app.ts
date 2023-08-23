@@ -4,8 +4,8 @@ import routes from "./routes/index.routes";
 import cors from "cors";
 import "./AppDataSource";
 
-import handleError from "./middlewares/handleErrors";
-import pageNotFound from "./middlewares/404";
+import { errorHandler } from "./middlewares/ErrorHandler";
+import { pageNotFound } from "./middlewares/404";
 
 //Initialize
 const server: Express = express();
@@ -25,6 +25,6 @@ server.use("/api", routes);
 server.use("*", pageNotFound);
 
 // Error catching endware.
-server.use(handleError);
+server.use(errorHandler);
 
 export default server;

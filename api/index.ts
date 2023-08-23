@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config();
 import "reflect-metadata";
 import server from "./src/app";
 import AppDataSource from "./src/AppDataSource";

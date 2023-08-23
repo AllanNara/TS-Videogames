@@ -14,9 +14,17 @@ export default class PlatformRepository extends Repository<Platform> {
 		return platform;
 	}
 
-	async createPlatform(platformData: Partial<Platform>): Promise<Platform> {
-		const platform = this.create(platformData);
-		await this.save(platform);
+	async createPlatform(
+		platformData: Partial<Platform> | Partial<Platform>[]
+	): Promise<Platform[] | Platform> {
+		let platform: Platform[] | Platform;
+		if (Array.isArray(platformData)) {
+			platform = this.create(platformData);
+			await this.save(platform);
+		} else {
+			platform = this.create(platformData);
+			await this.save(platform);
+		}
 		return platform;
 	}
 }

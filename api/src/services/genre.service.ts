@@ -11,45 +11,33 @@ class GenreService {
 	}
 
 	async find(names?: string[]) {
-		try {
-			const result = await this.repository.findAll(names);
-			if (!result.length && names) {
-				throw new CustomError("Genres not found.", 404);
-			} else if (!result.length) {
-				throw new CustomError(
-					"Database not loaded with genres.",
-					500,
-					"No genres found in the database, possible preload error"
-				);
-			}
-			return result;
-		} catch (error) {
-			throw new CustomError();
+		const result = await this.repository.findAll(names);
+		if (!result.length && names) {
+			throw new CustomError("Genres not found.", 404);
+		} else if (!result.length) {
+			throw new CustomError(
+				"Database not loaded with genres.",
+				500,
+				"No genres found in the database, possible preload error"
+			);
 		}
+		return result;
 	}
 
 	async findByName(name: string) {
-		try {
-			const result = await this.repository.findGenre(name);
-			if (!result)
-				throw new CustomError(
-					`Genre "${name}" not found`,
-					404,
-					"Error in the genre service"
-				);
-			return result;
-		} catch (error) {
-			throw new CustomError();
-		}
+		const result = await this.repository.findGenre(name);
+		if (!result)
+			throw new CustomError(
+				`Genre "${name}" not found`,
+				404,
+				"Error in the genre service"
+			);
+		return result;
 	}
 
-	async create(obj: { name: string }) {
-		try {
-			const result = await this.repository.createGenre(obj);
-			return result;
-		} catch (error) {
-			throw new CustomError();
-		}
+	async create(obj: { name: string; id: number } | { name: string; id: number }[]) {
+		const result = await this.repository.createGenre(obj);
+		return result;
 	}
 }
 

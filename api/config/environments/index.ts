@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const enviroments = {
 	PORT: process.env.PORT,
 	DB: process.env.DB,

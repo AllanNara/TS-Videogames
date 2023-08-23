@@ -1,30 +1,21 @@
 import axios from "axios";
-import { Genre } from "../Repository/entity";
-import { AxiosResults } from "../../types/types";
-const { API_KEY } = process.env;
+import config from "../../config/environments";
+import genreService from "../services/genre.service";
+import GenresApi from "../interfaces/genres_api";
 
 export async function addGenres(): Promise<void> {
-	try {
-		const findGenres = await Genre.find();
-		if (!Boolean(findGenres.length)) {
-			const genresApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
-			const genres: Array<AxiosResults> = genresApi.data.results;
-			const promises: Array<Promise<Genre>> = genres.map((genre) => {
-				let addGenre = new Genre();
-				addGenre.id = genre.id;
-				addGenre.name = genre.name;
-				return addGenre.save();
-			});
-			await Promise.all(promises);
-			console.log("Genred added");
-		} else {
-			console.log("Genres alredy charged");
-		}
-	} catch (error) {
-		if (error instanceof Error) {
-			console.log({ ErrorMsg: error.message });
-		} else {
-			console.log(error);
-		}
-	}
+	const findGenres = await genreService.find().catch(console.log);
+	if (findGenres?.length) return console.log("Genres alredy charged");
+
+	const { data } = await axios.get<GenresApi>(
+		`https://api.rawg.io/api/genres?key=${config.API_KEY}`
+	);
+
+	const genres = data.results.map(({ id, name }) => {
+		return { id, name };
+	});
+	genres.push({ name: "Web", id: 171 });
+	genreService.create(genres);
+
+	console.log("Genres added");
 }

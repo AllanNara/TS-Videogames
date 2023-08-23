@@ -16,18 +16,14 @@ class VideogameService {
 	}
 
 	async find(name?: string) {
-		try {
-			const resultsDB = await this.repository.findAll(name);
-			const resultsAPI = await getGamesApi(name);
-			const result = [...resultsAPI, ...resultsDB];
-			if (!result.length) {
-				throw new CustomError(`Games not found`, 404);
-			}
-			result.sort((a, b) => b.rating - a.rating);
-			return result;
-		} catch (error) {
-			throw new CustomError();
+		const resultsDB = await this.repository.findAll(name);
+		const resultsAPI = await getGamesApi(name);
+		const result = [...resultsAPI, ...resultsDB];
+		if (!result.length) {
+			throw new CustomError(`Games not found`, 404);
 		}
+		result.sort((a, b) => b.rating - a.rating);
+		return result;
 	}
 
 	async findById(id: string) {
@@ -35,55 +31,43 @@ class VideogameService {
 			/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 		);
 
-		try {
-			let result: Videogame | GameDetailsApi | null;
-			if (uuidRegex.test(id)) {
-				result = await this.repository.findGameById(id);
-			} else if (/^[0-9]*$/.test(id)) {
-				result = await getGameDetailsApi(id);
-			} else {
-				throw new CustomError(
-					"Parameter 'ID' not valid",
-					400,
-					"Parameter ID only receive number or UUID"
-				);
-			}
-
-			if (!result)
-				throw new CustomError(
-					`Videogame with id ${id} not found`,
-					404,
-					"Error in the videogame service"
-				);
-			return result;
-		} catch (error) {
-			throw new CustomError();
+		let result: Videogame | GameDetailsApi | null;
+		if (uuidRegex.test(id)) {
+			result = await this.repository.findGameById(id);
+		} else if (/^[0-9]*$/.test(id)) {
+			result = await getGameDetailsApi(id);
+		} else {
+			throw new CustomError(
+				"Parameter 'ID' not valid",
+				400,
+				"Parameter ID only receive number or UUID"
+			);
 		}
+
+		if (!result)
+			throw new CustomError(
+				`Videogame with id ${id} not found`,
+				404,
+				"Error in the videogame service"
+			);
+		return result;
 	}
 
 	async create(game: Partial<Videogame>, platforms: string[], genres: string[]) {
-		try {
-			const foundPlatforms = await platformService.find(platforms);
-			const foundGenres = await genreService.find(genres);
-			const result = await this.repository.createVideogame(
-				game,
-				foundPlatforms,
-				foundGenres
-			);
-			return result.id;
-		} catch (error) {
-			throw new CustomError();
-		}
+		const foundPlatforms = await platformService.find(platforms);
+		const foundGenres = await genreService.find(genres);
+		const result = await this.repository.createVideogame(
+			game,
+			foundPlatforms,
+			foundGenres
+		);
+		return result.id;
 	}
 
 	async delete(id: string) {
-		try {
-			const { affected } = await this.repository.deleteById(id);
-			if (!affected) throw new CustomError("No rows affected", 400);
-			return true;
-		} catch (error) {
-			throw new CustomError();
-		}
+		const { affected } = await this.repository.deleteById(id);
+		if (!affected) throw new CustomError("No rows affected", 400);
+		return true;
 	}
 }
 

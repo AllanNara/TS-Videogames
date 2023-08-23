@@ -14,9 +14,17 @@ export default class GenreRepository extends Repository<Genre> {
 		return genre;
 	}
 
-	async createGenre(genreData: Partial<Genre>): Promise<Genre> {
-		const genre = this.create(genreData);
-		await this.save(genre);
+	async createGenre(
+		genreData: Partial<Genre> | Partial<Genre>[]
+	): Promise<Genre | Genre[]> {
+		let genre: Genre[] | Genre;
+		if (Array.isArray(genreData)) {
+			genre = this.create(genreData);
+			await this.save(genre);
+		} else {
+			genre = this.create(genreData);
+			await this.save(genre);
+		}
 		return genre;
 	}
 }
