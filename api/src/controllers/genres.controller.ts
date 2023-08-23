@@ -1,19 +1,15 @@
-import { Request as Req, Response as Res, NextFunction as Next } from "express";
-import Genre from "../Repository/entity/Genre";
-import CustomError from "../utils/customError";
+import { Request, Response, NextFunction } from "express";
+import genreService from "../services/genre.service";
 
-export const allGenres = async (req: Req, res: Res, next: Next): Promise<any> => {
-	try {
-		const response = await Genre.find();
-		if (!response.length) {
-			throw new CustomError(
-				"Base de datos no cargada",
-				500,
-				"No se encontraron generos en la base de datos, posible error de carga previa"
-			);
+class GenreController {
+	public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
+		try {
+			const genres = await genreService.find();
+			res.send({ status: "success", result: genres });
+		} catch (error) {
+			next(error);
 		}
-		res.status(200).json(response);
-	} catch (error) {
-		next(error);
 	}
-};
+}
+
+export default new GenreController();
