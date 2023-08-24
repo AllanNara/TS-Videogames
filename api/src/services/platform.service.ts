@@ -1,17 +1,13 @@
-import AppDataSource from "../AppDataSource";
-import Platform from "../Repository/entity/Platform";
 import PlatformRepository from "../Repository/platform.repository";
 import CustomError from "../utils/customError";
 
-class PlatformService {
-	private repository: PlatformRepository;
+type newPlatform = { name: string; id: number };
 
-	constructor() {
-		this.repository = new PlatformRepository(Platform, AppDataSource.manager);
-	}
+export default class PlatformService {
+	constructor(private repository: PlatformRepository) {}
 
 	async find(names?: string[]) {
-		const result = await this.repository.findAll(names);
+		const result = await this.repository.findAllPlatforms(names);
 		if (!result.length && names) {
 			throw new CustomError("Platform not found.", 404);
 		} else if (!result.length) {
@@ -35,10 +31,8 @@ class PlatformService {
 		return result;
 	}
 
-	async create(obj: { name: string; id: number } | { name: string; id: number }[]) {
-		const result = await this.repository.createPlatform(obj);
+	async create(platform: newPlatform | newPlatform[]) {
+		const result = await this.repository.createPlatform(platform);
 		return result;
 	}
 }
-
-export default new PlatformService();

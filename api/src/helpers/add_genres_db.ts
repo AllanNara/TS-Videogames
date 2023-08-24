@@ -1,7 +1,14 @@
 import axios from "axios";
 import config from "../../config/environments";
-import genreService from "../services/genre.service";
 import GenresApi from "../interfaces/genres_api";
+import GenreService from "../services/genre.service";
+import GenreRepository from "../Repository/genre.repository";
+import Genre from "../Repository/entity/Genre";
+import AppDataSource from "../AppDataSource";
+// import { Repository } from "typeorm";
+// const repository = new Repository(Genre, AppDataSource.manager);
+const genreRepository = new GenreRepository(AppDataSource.manager.getRepository(Genre));
+const genreService = new GenreService(genreRepository);
 
 export async function addGenres(): Promise<void> {
 	const findGenres = await genreService.find().catch(console.log);

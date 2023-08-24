@@ -1,17 +1,13 @@
-import AppDataSource from "../AppDataSource";
-import Genre from "../Repository/entity/Genre";
 import GenreRepository from "../Repository/genre.repository";
 import CustomError from "../utils/customError";
 
-class GenreService {
-	private repository: GenreRepository;
+type newGenre = { name: string; id: number };
 
-	constructor() {
-		this.repository = new GenreRepository(Genre, AppDataSource.manager);
-	}
+export default class GenreService {
+	constructor(private repository: GenreRepository) {}
 
 	async find(names?: string[]) {
-		const result = await this.repository.findAll(names);
+		const result = await this.repository.findAllGenres(names);
 		if (!result.length && names) {
 			throw new CustomError("Genres not found.", 404);
 		} else if (!result.length) {
@@ -35,10 +31,8 @@ class GenreService {
 		return result;
 	}
 
-	async create(obj: { name: string; id: number } | { name: string; id: number }[]) {
-		const result = await this.repository.createGenre(obj);
+	async create(genre: newGenre | newGenre[]) {
+		const result = await this.repository.createGenre(genre);
 		return result;
 	}
 }
-
-export default new GenreService();

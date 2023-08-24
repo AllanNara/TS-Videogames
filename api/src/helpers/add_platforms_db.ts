@@ -1,7 +1,14 @@
 import axios from "axios";
 import config from "../../config/environments";
-import platformService from "../services/platform.service";
 import PlatformsApi from "../interfaces/platforms_api";
+import PlatformService from "../services/platform.service";
+import PlatformRepository from "../Repository/platform.repository";
+import Platform from "../Repository/entity/Platform";
+import AppDataSource from "../AppDataSource";
+import { Repository } from "typeorm";
+const repository = new Repository(Platform, AppDataSource.manager);
+const platformRepository = new PlatformRepository(repository);
+const platformService = new PlatformService(platformRepository);
 
 export async function addPlatforms(): Promise<void> {
 	const findPlatforms = await platformService.find().catch(console.log);

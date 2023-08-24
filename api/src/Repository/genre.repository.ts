@@ -1,29 +1,30 @@
 import { Repository } from "typeorm";
 import Genre from "./entity/Genre";
 
-export default class GenreRepository extends Repository<Genre> {
-	async findAll(names?: string[]): Promise<Genre[]> {
+type GenreData = Partial<Genre> | Partial<Genre>[];
+
+export default class GenreRepository {
+	constructor(private repository: Repository<Genre>) {}
+	async findAllGenres(names?: string[]): Promise<Genre[]> {
 		const options: { where?: Object } = {};
 		if (names) options.where = { names };
-		const genres = await this.find(options);
+		const genres = await this.repository.find(options);
 		return genres;
 	}
 
 	async findGenre(name: string): Promise<Genre | null> {
-		const genre = await this.findOne({ where: { name } });
+		const genre = await this.repository.findOne({ where: { name } });
 		return genre;
 	}
 
-	async createGenre(
-		genreData: Partial<Genre> | Partial<Genre>[]
-	): Promise<Genre | Genre[]> {
+	async createGenre(genreData: GenreData): Promise<Genre | Genre[]> {
 		let genre: Genre[] | Genre;
 		if (Array.isArray(genreData)) {
-			genre = this.create(genreData);
-			await this.save(genre);
+			genre = this.repository.create(genreData);
+			await this.repository.save(genre);
 		} else {
-			genre = this.create(genreData);
-			await this.save(genre);
+			genre = this.repository.create(genreData);
+			await this.repository.save(genre);
 		}
 		return genre;
 	}

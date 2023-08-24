@@ -4,8 +4,9 @@ import Platform from "./entity/Platform";
 import Genre from "./entity/Genre";
 import { Like } from "typeorm";
 
-export default class VideogameRepository extends Repository<Videogame> {
-	async findAll(name?: string): Promise<Videogame[]> {
+export default class VideogameRepository {
+	constructor(private repository: Repository<Videogame>) {}
+	async findAllGames(name?: string): Promise<Videogame[]> {
 		const options: { relations: Object; where?: Object } = {
 			relations: {
 				genres: true,
@@ -13,12 +14,12 @@ export default class VideogameRepository extends Repository<Videogame> {
 			},
 		};
 		if (name) options.where = { name: Like(`%${name}%`) };
-		const videogames = await this.find(options);
+		const videogames = await this.repository.find(options);
 		return videogames;
 	}
 
 	async findGameById(id: string): Promise<Videogame | null> {
-		const videogame = await this.findOne({
+		const videogame = await this.repository.findOne({
 			where: { id },
 			relations: {
 				platforms: true,
@@ -33,15 +34,15 @@ export default class VideogameRepository extends Repository<Videogame> {
 		platforms: Platform[],
 		genres: Genre[]
 	): Promise<Videogame> {
-		const videogame = this.create(videogameData);
+		const videogame = this.repository.create(videogameData);
 		videogame.platforms = platforms;
 		videogame.genres = genres;
-		await this.save(videogame);
+		await this.repository.save(videogame);
 		return videogame;
 	}
 
 	async deleteById(id: string): Promise<DeleteResult> {
-		const videogame = await this.delete(id);
+		const videogame = await this.repository.delete(id);
 		return videogame;
 	}
 }

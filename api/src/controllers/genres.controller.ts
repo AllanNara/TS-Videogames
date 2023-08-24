@@ -1,15 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import genreService from "../services/genre.service";
+import GenreService from "../services/genre.service";
 
-class GenreController {
+export default class GenreController {
+	constructor(private genreService: GenreService) {}
 	public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
-			const genres = await genreService.find();
+			const genres = await this.genreService.find();
 			res.send({ status: "success", result: genres });
 		} catch (error) {
 			next(error);
 		}
 	}
 }
-
-export default new GenreController();

@@ -1,15 +1,14 @@
 import { Request, Response, NextFunction } from "express";
-import platformService from "../services/platform.service";
+import PlatformService from "../services/platform.service";
 
-class PlatformController {
+export default class PlatformController {
+	constructor(private platformService: PlatformService) {}
 	public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
-			const platforms = await platformService.find();
+			const platforms = await this.platformService.find();
 			res.send({ status: "success", result: platforms });
 		} catch (error) {
 			next(error);
 		}
 	}
 }
-
-export default new PlatformController();

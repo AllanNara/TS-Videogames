@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import videogameService from "../services/videogame.service";
+import VideogameService from "../services/videogame.service";
 
-class VideogameController {
+export default class VideogameController {
+	constructor(private videogameService: VideogameService) {}
 	public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const { name } = req.body;
-			const videogames = await videogameService.find(name);
+			const videogames = await this.videogameService.find(name);
 			res.send({ status: "success", result: videogames });
 		} catch (error) {
 			next(error);
@@ -15,7 +16,7 @@ class VideogameController {
 	public async getById(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const { id } = req.params;
-			const videogame = await videogameService.findById(id);
+			const videogame = await this.videogameService.findById(id);
 			res.send({ status: "success", result: videogame });
 		} catch (error) {
 			next(error);
@@ -34,7 +35,7 @@ class VideogameController {
 				released,
 			};
 
-			const createdGame = await videogameService.create(newGame, platforms, genres);
+			const createdGame = await this.videogameService.create(newGame, platforms, genres);
 			res.send({ status: "success", result: createdGame });
 		} catch (error) {
 			next(error);
@@ -44,12 +45,10 @@ class VideogameController {
 	public async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const { id } = req.params;
-			const deletedGame = await videogameService.delete(id);
+			const deletedGame = await this.videogameService.delete(id);
 			res.send({ status: "success", result: deletedGame });
 		} catch (error) {
 			next(error);
 		}
 	}
 }
-
-export default new VideogameController();

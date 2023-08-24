@@ -1,24 +1,28 @@
-import AppDataSource from "../AppDataSource";
-import Videogame from "../Repository/entity/Videogame";
-import VideogameRepository from "../Repository/videogame.repository";
-import GameDetailsApi from "../interfaces/game_details_api";
-import CustomError from "../utils/customError";
-import genreService from "./genre.service";
-import platformService from "./platform.service";
 import { getGameDetailsApi } from "./utils/GameDetailsApi";
 import { getGamesApi } from "./utils/GamesApi";
+import CustomError from "../utils/customError";
+import GenreService from "./genre.service";
+import ParsedGame from "../interfaces/game_dto";
+import PlatformService from "./platform.service";
+import Videogame from "../Repository/entity/Videogame";
+import VideogameDto from "../DTOs/videogame.dto";
+import VideogameRepository from "../Repository/videogame.repository";
 
-class VideogameService {
-	private repository: VideogameRepository;
-
-	constructor() {
-		this.repository = new VideogameRepository(Videogame, AppDataSource.manager);
-	}
+export default class VideogameService {
+	constructor(
+		private repository: VideogameRepository,
+		private platformService: PlatformService,
+		private genreService: GenreService
+	) {}
 
 	async find(name?: string) {
-		const resultsDB = await this.repository.findAll(name);
+		const resultsDB = await this.repository.findAllGames(name);
 		const resultsAPI = await getGamesApi(name);
-		const result = [...resultsAPI, ...resultsDB];
+		const resultDBParsed = resultsDB.map((game) => {
+			return new VideogameDto(game);
+		});
+
+		const result = [...resultDBParsed, ...resultsAPI];
 		if (!result.length) {
 			throw new CustomError(`Games not found`, 404);
 		}
@@ -26,24 +30,25 @@ class VideogameService {
 		return result;
 	}
 
-	async findById(id: string) {
+	async searchAndParsedGameByIdType(id: string): Promise<ParsedGame | null> {
 		const uuidRegex = new RegExp(
 			/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 		);
-
-		let result: Videogame | GameDetailsApi | null;
 		if (uuidRegex.test(id)) {
-			result = await this.repository.findGameById(id);
-		} else if (/^[0-9]*$/.test(id)) {
-			result = await getGameDetailsApi(id);
-		} else {
-			throw new CustomError(
-				"Parameter 'ID' not valid",
-				400,
-				"Parameter ID only receive number or UUID"
-			);
+			const game = await this.repository.findGameById(id);
+			return game ? new VideogameDto(game) : game;
 		}
+		if (/^[0-9]*$/.test(id)) return await getGameDetailsApi(id);
 
+		throw new CustomError(
+			"Parameter 'ID' not valid",
+			400,
+			"Parameter ID only receive number or UUID"
+		);
+	}
+
+	async findById(id: string) {
+		let result = this.searchAndParsedGameByIdType(id);
 		if (!result)
 			throw new CustomError(
 				`Videogame with id ${id} not found`,
@@ -54,8 +59,8 @@ class VideogameService {
 	}
 
 	async create(game: Partial<Videogame>, platforms: string[], genres: string[]) {
-		const foundPlatforms = await platformService.find(platforms);
-		const foundGenres = await genreService.find(genres);
+		const foundPlatforms = await this.platformService.find(platforms);
+		const foundGenres = await this.genreService.find(genres);
 		const result = await this.repository.createVideogame(
 			game,
 			foundPlatforms,
@@ -70,5 +75,3 @@ class VideogameService {
 		return true;
 	}
 }
-
-export default new VideogameService();

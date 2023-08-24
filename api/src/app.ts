@@ -1,6 +1,9 @@
 import express, { Express } from "express";
 import morgan from "morgan";
-import routes from "./routes/index.routes";
+// import routes from "./routes/index.routes";
+import genresRoutes from "./routes/genres.routes";
+import platformsRoutes from "./routes/platforms.routes";
+import videogamesRoutes from "./routes/videogames.routes";
 import cors from "cors";
 import "./AppDataSource";
 
@@ -19,7 +22,10 @@ server.use(cors());
 server.use(morgan("dev"));
 
 //All routes
-server.use("/api", routes);
+// server.use("/api", routes);
+server.use("/api/genres", genresRoutes);
+server.use("/api/platforms", platformsRoutes);
+server.use("/api/videogames", videogamesRoutes);
 
 // 404 Page not found
 server.use("*", pageNotFound);

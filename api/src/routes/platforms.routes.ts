@@ -1,8 +1,36 @@
 import { IRouter, Router } from "express";
-import platformsControllers from "../controllers/platforms.controllers";
+import PlatformController from "../controllers/platforms.controllers";
+import PlatformService from "../services/platform.service";
+import PlatformRepository from "../Repository/platform.repository";
+import Platform from "../Repository/entity/Platform";
+import AppDataSource from "../AppDataSource";
+import { Repository, EntityManager } from "typeorm";
 
-const router: IRouter = Router();
+class PlatformsRoutes {
+	private router: IRouter;
+	private platformController: PlatformController;
 
-router.get("/", platformsControllers.getAll);
+	constructor() {
+		this.router = Router();
+		this.initializePlatformController();
+		this.initializeRoutes();
+	}
 
-export default router;
+	private initializePlatformController() {
+		const repository = new Repository(Platform, AppDataSource.manager);
+		const platformRepository = new PlatformRepository(repository);
+		const platformService = new PlatformService(platformRepository);
+		this.platformController = new PlatformController(platformService);
+	}
+
+	private initializeRoutes() {
+		this.router.get("/", this.platformController.getAll);
+	}
+
+	public getRouter() {
+		return this.router;
+	}
+}
+
+const platformsRoutes = new PlatformsRoutes();
+export default platformsRoutes.getRouter();
