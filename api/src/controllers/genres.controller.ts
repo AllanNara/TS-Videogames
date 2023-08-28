@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import GenreService from "../services/genre.service";
 
 export default class GenreController {
-	constructor(private genreService: GenreService) {}
+	private genreService: GenreService;
+	constructor(genreService: GenreService) {
+		this.genreService = genreService;
+	}
+
 	public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const genres = await this.genreService.find();

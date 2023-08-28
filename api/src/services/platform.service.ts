@@ -6,7 +6,7 @@ type newPlatform = { name: string; id: number };
 export default class PlatformService {
 	constructor(private repository: PlatformRepository) {}
 
-	async find(names?: string[]) {
+	async find(names?: { name: string }[]) {
 		const result = await this.repository.findAllPlatforms(names);
 		if (!result.length && names) {
 			throw new CustomError("Platform not found.", 404);

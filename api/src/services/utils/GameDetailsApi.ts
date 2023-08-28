@@ -3,13 +3,14 @@ import CustomError from "../../utils/customError";
 import GameDetailsApi from "../../interfaces/game_details_api";
 import config from "../../../config/environments";
 import ParsedGame from "../../interfaces/game_dto";
+import VideogameDetailsDto from "../../DTOs/videogameDetail.dto";
 
 export async function getGameDetailsApi(id: string): Promise<ParsedGame | null> {
 	try {
 		const { data: game } = await axios.get<GameDetailsApi>(
 			`https://api.rawg.io/api/games/${id}?key=${config.API_KEY}`
 		);
-		const parsedGame: ParsedGame = {
+		const parsedGame: ParsedGame = new VideogameDetailsDto({
 			id: game.id,
 			rating: game.rating,
 			name: game.name,
@@ -23,7 +24,7 @@ export async function getGameDetailsApi(id: string): Promise<ParsedGame | null> 
 			}),
 			released: game.released,
 			description: game.description_raw,
-		};
+		});
 		return parsedGame;
 	} catch (error) {
 		if (axios.isAxiosError(error) && error.response?.status === 404) {

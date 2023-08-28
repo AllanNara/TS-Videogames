@@ -1,13 +1,13 @@
-import { Repository } from "typeorm";
+import { FindManyOptions, Repository } from "typeorm";
 import Genre from "./entity/Genre";
 
 type GenreData = Partial<Genre> | Partial<Genre>[];
 
 export default class GenreRepository {
 	constructor(private repository: Repository<Genre>) {}
-	async findAllGenres(names?: string[]): Promise<Genre[]> {
-		const options: { where?: Object } = {};
-		if (names) options.where = { names };
+	async findAllGenres(names?: { name: string }[]): Promise<Genre[]> {
+		const options: FindManyOptions = {};
+		if (names) options.where = names;
 		const genres = await this.repository.find(options);
 		return genres;
 	}

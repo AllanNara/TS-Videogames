@@ -1,10 +1,10 @@
-import { IRouter, Router } from "express";
+import { IRouter, Router, Request, Response, NextFunction } from "express";
 import PlatformController from "../controllers/platforms.controllers";
 import PlatformService from "../services/platform.service";
 import PlatformRepository from "../Repository/platform.repository";
 import Platform from "../Repository/entity/Platform";
 import AppDataSource from "../AppDataSource";
-import { Repository, EntityManager } from "typeorm";
+import { Repository } from "typeorm";
 
 class PlatformsRoutes {
 	private router: IRouter;
@@ -23,8 +23,12 @@ class PlatformsRoutes {
 		this.platformController = new PlatformController(platformService);
 	}
 
+	private getAllPlatforms(req: Request, res: Response, next: NextFunction) {
+		return this.platformController.getAll(req, res, next);
+	}
+
 	private initializeRoutes() {
-		this.router.get("/", this.platformController.getAll);
+		this.router.get("/", this.getAllPlatforms.bind(this));
 	}
 
 	public getRouter() {
@@ -32,5 +36,4 @@ class PlatformsRoutes {
 	}
 }
 
-const platformsRoutes = new PlatformsRoutes();
-export default platformsRoutes.getRouter();
+export default PlatformsRoutes;

@@ -34,6 +34,8 @@ export default class VideogameService {
 		const uuidRegex = new RegExp(
 			/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 		);
+		console.log({ id });
+
 		if (uuidRegex.test(id)) {
 			const game = await this.repository.findGameById(id);
 			return game ? new VideogameDto(game) : game;
@@ -59,8 +61,14 @@ export default class VideogameService {
 	}
 
 	async create(game: Partial<Videogame>, platforms: string[], genres: string[]) {
-		const foundPlatforms = await this.platformService.find(platforms);
-		const foundGenres = await this.genreService.find(genres);
+		let generateListNamePlatforms = platforms.map((platform) => {
+			return { name: platform };
+		});
+		let generateListNameGenres = genres.map((genre) => {
+			return { name: genre };
+		});
+		const foundPlatforms = await this.platformService.find(generateListNamePlatforms);
+		const foundGenres = await this.genreService.find(generateListNameGenres);
 		const result = await this.repository.createVideogame(
 			game,
 			foundPlatforms,

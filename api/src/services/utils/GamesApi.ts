@@ -1,6 +1,7 @@
 import axios from "axios";
 import GamesApi, { Result } from "../../interfaces/games_api";
 import ParsedGame from "../../interfaces/game_dto";
+import VideogameDto from "../../DTOs/videogame.dto";
 
 const { API_KEY } = process.env;
 
@@ -18,7 +19,7 @@ export async function getGamesApi(name?: string): Promise<ParsedGame[]> {
 	}
 
 	const parsedGames: Array<ParsedGame> = gamesResultApi.map((game) => {
-		return {
+		return new VideogameDto({
 			id: game.id,
 			rating: game.rating,
 			name: game.name,
@@ -31,7 +32,7 @@ export async function getGamesApi(name?: string): Promise<ParsedGame[]> {
 				return { id: platformProp.platform.id, name: platformProp.platform.name };
 			}),
 			released: game.released,
-		};
+		});
 	});
 
 	return parsedGames;

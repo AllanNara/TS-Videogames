@@ -12,7 +12,7 @@ const platformService = new PlatformService(platformRepository);
 
 export async function addPlatforms(): Promise<void> {
 	const findPlatforms = await platformService.find().catch(console.log);
-	if (!findPlatforms?.length) return console.log("Platforms alredy charged");
+	if (findPlatforms?.length) return console.log("Platforms alredy charged");
 
 	const { data } = await axios.get<PlatformsApi>(
 		`https://api.rawg.io/api/platforms?key=${config.API_KEY}`

@@ -1,8 +1,9 @@
-import { IRouter, Router } from "express";
-import GenresController from "../controllers/genres.controller";
-import GenreService from "../services/genre.service";
-import GenreRepository from "../Repository/genre.repository";
+import { IRouter, Router, Request, Response, NextFunction } from "express";
 import Genre from "../Repository/entity/Genre";
+import { Repository } from "typeorm";
+import GenreRepository from "../Repository/genre.repository";
+import GenreService from "../services/genre.service";
+import GenresController from "../controllers/genres.controller";
 import AppDataSource from "../AppDataSource";
 
 class GenresRoutes {
@@ -16,21 +17,23 @@ class GenresRoutes {
 	}
 
 	private initializeGenresController() {
-		const genreRepository = new GenreRepository(
-			AppDataSource.manager.getRepository(Genre)
-		);
+		const repository = new Repository(Genre, AppDataSource.manager);
+		const genreRepository = new GenreRepository(repository);
 		const genreService = new GenreService(genreRepository);
 		this.genresController = new GenresController(genreService);
 	}
 
-	private async initializeRoutes() {
-		this.router.get("/", this.genresController.getAll);
+	private getAllGenres(req: Request, res: Response, next: NextFunction) {
+		return this.genresController.getAll(req, res, next);
+	}
+
+	private initializeRoutes() {
+		this.router.get("/", this.getAllGenres.bind(this));
 	}
 
 	public getRouter() {
-		return this.router;
+		return this.router.bind(this);
 	}
 }
 
-const genresRoutes = new GenresRoutes();
-export default genresRoutes.getRouter();
+export default GenresRoutes;

@@ -1,36 +1,56 @@
 import express, { Express } from "express";
+import environments from "../config/environments";
 import morgan from "morgan";
-// import routes from "./routes/index.routes";
-import genresRoutes from "./routes/genres.routes";
-import platformsRoutes from "./routes/platforms.routes";
-import videogamesRoutes from "./routes/videogames.routes";
+import GenresRoutes from "./routes/genres.routes";
+import PlatformsRoutes from "./routes/platforms.routes";
+import VideogamesRoutes from "./routes/videogames.routes";
+
 import cors from "cors";
 import "./AppDataSource";
 
 import { errorHandler } from "./middlewares/ErrorHandler";
 import { pageNotFound } from "./middlewares/404";
+import AppDataSource from "./AppDataSource";
 
-//Initialize
-const server: Express = express();
+export default class App {
+	constructor(
+		private app: Express = express(),
+		private PORT: number = environments.PORT,
+		private genresRoutes = new GenresRoutes(),
+		private platformsRoutes = new PlatformsRoutes(),
+		private videogamesRoutes = new VideogamesRoutes()
+	) {
+		this.setupMiddlewares();
+		this.setupRoutes();
+	}
 
-//Settings
-server.use(express.urlencoded({ extended: true, limit: "50mb" }));
-server.use(express.json({ limit: "50mb" }));
-server.use(cors());
+	private setupMiddlewares() {
+		this.app.use(cors());
+		this.app.use(express.json({ limit: "50mb" }));
+		this.app.use(express.urlencoded({ extended: true }));
+		this.app.use(morgan("dev"));
+	}
 
-//Middlewares
-server.use(morgan("dev"));
+	private setupRoutes() {
+		this.app.use("/api/genres", this.genresRoutes.getRouter());
+		this.app.use("/api/platforms", this.platformsRoutes.getRouter());
+		this.app.use("/api/videogames", this.videogamesRoutes.getRouter());
+		this.app.use("*", pageNotFound);
+		this.app.use(errorHandler);
+	}
 
-//All routes
-// server.use("/api", routes);
-server.use("/api/genres", genresRoutes);
-server.use("/api/platforms", platformsRoutes);
-server.use("/api/videogames", videogamesRoutes);
+	public async setupDatabase() {
+		try {
+			await AppDataSource.initialize();
+			console.log("Database conected");
+		} catch (error) {
+			console.log("Error connecting to Database:", error);
+		}
+	}
 
-// 404 Page not found
-server.use("*", pageNotFound);
-
-// Error catching endware.
-server.use(errorHandler);
-
-export default server;
+	public startServer() {
+		this.app.listen(this.PORT, () => {
+			console.log(`Server running on port ${this.PORT}`);
+		});
+	}
+}

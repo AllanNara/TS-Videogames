@@ -1,4 +1,4 @@
-import { IRouter, Router } from "express";
+import { Router, IRouter, NextFunction, Request, Response } from "express";
 import { checkBodyFields } from "../middlewares/gameCreated";
 
 import { Repository } from "typeorm";
@@ -46,11 +46,28 @@ class VideogamesRoutes {
 		this.videogamesControllers = new VideogamesControllers(videogameService);
 	}
 
+	private getAllVideogames(req: Request, res: Response, next: NextFunction) {
+		return this.videogamesControllers.getAll(req, res, next);
+	}
+
+	private createVideogame(req: Request, res: Response, next: NextFunction) {
+		return this.videogamesControllers.create(req, res, next);
+	}
+
+	private getGameById(req: Request, res: Response, next: NextFunction) {
+		return this.videogamesControllers.getById(req, res, next);
+	}
+
+	private deleteVideogame(req: Request, res: Response, next: NextFunction) {
+		return this.videogamesControllers.delete(req, res, next);
+	}
+
 	private initializeRoutes() {
-		this.router.get("/", this.videogamesControllers.getAll);
-		this.router.post("/", checkBodyFields, this.videogamesControllers.create);
-		this.router.get("/:idVideogame", this.videogamesControllers.getById);
-		this.router.delete("/:idVideogame", this.videogamesControllers.delete);
+		this.router
+			.get("/", this.getAllVideogames.bind(this))
+			.post("/", checkBodyFields, this.createVideogame.bind(this))
+			.get("/:id", this.getGameById.bind(this))
+			.delete("/:id", this.deleteVideogame.bind(this));
 	}
 
 	public getRouter() {
@@ -58,5 +75,4 @@ class VideogamesRoutes {
 	}
 }
 
-const videogamesRoutes = new VideogamesRoutes();
-export default videogamesRoutes.getRouter();
+export default VideogamesRoutes;

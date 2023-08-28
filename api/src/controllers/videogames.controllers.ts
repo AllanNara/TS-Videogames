@@ -3,6 +3,7 @@ import VideogameService from "../services/videogame.service";
 
 export default class VideogameController {
 	constructor(private videogameService: VideogameService) {}
+
 	public async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
 		try {
 			const { name } = req.body;

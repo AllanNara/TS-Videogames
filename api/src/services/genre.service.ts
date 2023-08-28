@@ -6,7 +6,7 @@ type newGenre = { name: string; id: number };
 export default class GenreService {
 	constructor(private repository: GenreRepository) {}
 
-	async find(names?: string[]) {
+	async find(names?: { name: string }[]) {
 		const result = await this.repository.findAllGenres(names);
 		if (!result.length && names) {
 			throw new CustomError("Genres not found.", 404);
